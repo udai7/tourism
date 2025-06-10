@@ -1,9 +1,10 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+import { useState } from "react";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import BottomNavigation from "@/components/bottom-navigation";
 
 export default function ChatPage() {
   const [messages, setMessages] = useState([
@@ -13,22 +14,25 @@ export default function ChatPage() {
       sender: "bot",
       time: "7:30 PM",
     },
-  ])
-  const [newMessage, setNewMessage] = useState("")
+  ]);
+  const [newMessage, setNewMessage] = useState("");
 
   const handleSendMessage = () => {
-    if (!newMessage.trim()) return
+    if (!newMessage.trim()) return;
 
     // Add user message
     const userMessage = {
       id: messages.length + 1,
       text: newMessage,
       sender: "user",
-      time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-    }
+      time: new Date().toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
+    };
 
-    setMessages([...messages, userMessage])
-    setNewMessage("")
+    setMessages([...messages, userMessage]);
+    setNewMessage("");
 
     // Simulate bot response after a short delay
     setTimeout(() => {
@@ -38,26 +42,30 @@ export default function ChatPage() {
         "I can provide information about hotels and accommodations in Tripura.",
         "Do you need help with transportation options within Tripura?",
         "I can tell you about local cuisine and cultural events happening now.",
-      ]
+      ];
 
-      const randomResponse = botResponses[Math.floor(Math.random() * botResponses.length)]
+      const randomResponse =
+        botResponses[Math.floor(Math.random() * botResponses.length)];
 
       const botMessage = {
         id: messages.length + 2,
         text: randomResponse,
         sender: "bot",
-        time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-      }
+        time: new Date().toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+      };
 
-      setMessages((prev) => [...prev, botMessage])
-    }, 1000)
-  }
+      setMessages((prev) => [...prev, botMessage]);
+    }, 1000);
+  };
 
   return (
-    <main className="flex flex-col h-full">
+    <main className="flex flex-col h-full pb-16">
       {/* Chat Header */}
       <div className="sticky top-0 z-10 bg-emerald-700 text-white p-4 flex items-center">
-        <Link href="/">
+        <Link href="/home">
           <Button variant="ghost" size="icon" className="text-white mr-2">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -106,9 +114,14 @@ export default function ChatPage() {
       </div>
 
       {/* Chat Messages */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4 pb-20">
+      <div className="flex-1 overflow-y-auto p-4 space-y-4">
         {messages.map((message) => (
-          <div key={message.id} className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"}`}>
+          <div
+            key={message.id}
+            className={`flex ${
+              message.sender === "user" ? "justify-end" : "justify-start"
+            }`}
+          >
             <div
               className={`max-w-[80%] p-3 rounded-lg ${
                 message.sender === "user"
@@ -117,7 +130,13 @@ export default function ChatPage() {
               }`}
             >
               <p className="text-sm">{message.text}</p>
-              <p className={`text-xs mt-1 ${message.sender === "user" ? "text-emerald-100" : "text-gray-500"}`}>
+              <p
+                className={`text-xs mt-1 ${
+                  message.sender === "user"
+                    ? "text-emerald-100"
+                    : "text-gray-500"
+                }`}
+              >
                 {message.time}
               </p>
             </div>
@@ -127,21 +146,25 @@ export default function ChatPage() {
 
       {/* Quick Suggestions */}
       <div className="bg-white p-2 border-t flex gap-2 overflow-x-auto">
-        {["Popular destinations", "Hotels nearby", "Things to do", "Local food", "Transport options"].map(
-          (suggestion) => (
-            <Button
-              key={suggestion}
-              variant="outline"
-              size="sm"
-              className="whitespace-nowrap text-xs"
-              onClick={() => {
-                setNewMessage(suggestion)
-              }}
-            >
-              {suggestion}
-            </Button>
-          ),
-        )}
+        {[
+          "Popular destinations",
+          "Hotels nearby",
+          "Things to do",
+          "Local food",
+          "Transport options",
+        ].map((suggestion) => (
+          <Button
+            key={suggestion}
+            variant="outline"
+            size="sm"
+            className="whitespace-nowrap text-xs"
+            onClick={() => {
+              setNewMessage(suggestion);
+            }}
+          >
+            {suggestion}
+          </Button>
+        ))}
       </div>
 
       {/* Message Input */}
@@ -171,7 +194,7 @@ export default function ChatPage() {
           onChange={(e) => setNewMessage(e.target.value)}
           onKeyDown={(e) => {
             if (e.key === "Enter") {
-              handleSendMessage()
+              handleSendMessage();
             }
           }}
         />
@@ -197,6 +220,9 @@ export default function ChatPage() {
           </svg>
         </Button>
       </div>
+
+      {/* Bottom Navigation */}
+      <BottomNavigation />
     </main>
-  )
+  );
 }

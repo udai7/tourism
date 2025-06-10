@@ -1,11 +1,11 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import Link from "next/link"
-import { cn } from "@/lib/utils"
+import { usePathname } from "next/navigation";
+import Link from "next/link";
+import { cn } from "@/lib/utils";
 
 export default function BottomNavigation() {
-  const [active, setActive] = useState("home")
+  const pathname = usePathname();
 
   const navItems = [
     {
@@ -27,7 +27,7 @@ export default function BottomNavigation() {
           <polyline points="9 22 9 12 15 12 15 22" />
         </svg>
       ),
-      href: "/",
+      href: "/home",
     },
     {
       name: "explore",
@@ -116,7 +116,7 @@ export default function BottomNavigation() {
       ),
       href: "/more",
     },
-  ]
+  ];
 
   return (
     <div className="fixed bottom-0 left-0 right-0 max-w-[375px] mx-auto bg-white border-t border-gray-200 flex justify-around py-2 px-4 z-10">
@@ -125,15 +125,18 @@ export default function BottomNavigation() {
           key={item.name}
           href={item.href}
           className={cn(
-            "flex flex-col items-center justify-center p-2 rounded-lg",
-            active === item.name ? "text-emerald-600" : "text-gray-500 hover:text-emerald-600",
+            "flex flex-col items-center justify-center p-2 rounded-lg transition-colors",
+            pathname === item.href
+              ? "text-emerald-600 bg-emerald-50"
+              : "text-gray-500 hover:text-emerald-600 hover:bg-emerald-50/50"
           )}
-          onClick={() => setActive(item.name)}
         >
           {item.icon}
-          <span className="text-xs mt-1">{item.name.charAt(0).toUpperCase() + item.name.slice(1)}</span>
+          <span className="text-xs mt-1">
+            {item.name.charAt(0).toUpperCase() + item.name.slice(1)}
+          </span>
         </Link>
       ))}
     </div>
-  )
+  );
 }
